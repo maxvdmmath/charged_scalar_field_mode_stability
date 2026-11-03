@@ -1,0 +1,1151 @@
+
+
+
+
+
+
+
+
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{rmk}{Remark}[section]
+\usepackage{xcolor}
+
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+
+
+\newcommand{\br}[1]{\left( #1 \right)}
+
+\renewcommand{\theequation}{%
+	\ifnum\value{section}=0
+	\arabic{equation}%
+	\else
+	\thesection.\arabic{equation}%
+	\fi}
+
+\renewcommand{\thetheorem}{%
+	\ifnum\value{section}=0
+	\arabic{theorem}%
+	\else
+	\thesection.\arabic{theorem}%
+	\fi}
+
+\newcommand{\fla}[1]{\textcolor{purple}{#1}}
+\newcommand{\maxime}[1]{\textcolor{green!50!black}{#1}}
+
+
+\title{Mode Stability for Charged Scalar Fields \\on  sub-extremal Reissner--Nordstr\"om black holes}
+\author{Flavio Rossetti, Maxime Van de Moortel}
+\date{\today}
+\begin{document}
+	\maketitle
+	
+	\begin{abstract}	
+		We prove mode stability for massless charged scalar fields on 
+		Reissner--Nordstr\"om black hole exterior regions in the full sub-extremal range, without  a smallness assumption on the charge coupling. This complements a previous result of Gajic on the extremal and near-extremal cases.\\
+		
+		\noindent\textbf{Formal verification and AI statement.}
+		The proof was developed through interactions with AI models
+		(ChatGPT 5.6 and Claude Opus 5.4), which were prompted to adapt
+		the mode-stability approach introduced by P.~Hintz in
+		\emph{Mode stability for the scalar wave equation on subextremal
+			Kerr--de Sitter spacetimes} \cite{HintzKdS2026}. The argument presented here closely
+		follows Hintz's approach.	The result answers a question of interest to the general relativity
+		community. The key ideas underlying the adaptation were generated
+		by the AI models; the authors have subsequently worked through
+		the argument in detail and rewritten the proof, which will also be appended to our forthcoming proof of decay for charged scalar fields on  sub-extremal Reissner--Nordstr\"om black holes using Fourier-based methods \cite{RVdM}.	They take full responsibility for the correctness of the mathematical statements and
+		proofs.		The present proof of mode stability has also been formally verified in Lean~4.
+		The formalization is available \href{}{here}.
+	\end{abstract}
+	
+	
+	
+	
+	\section*{Introduction}
+	
+	We consider the massless charged wave equation with a fixed electromagnetic potential
+	\begin{equation} \label{wave_eqn}
+		g^{\mu\nu}D_\mu D_\nu\phi=0,\quad D_\mu=\nabla_\mu+iq_0A_\mu,
+		\qquad A=\frac{e}{r}\,dt
+	\end{equation}
+	on the exterior of a sub-extremal Reissner--Nordstr\"om black hole,
+	\begin{equation} \label{RN_metric}
+		g=-\Omega^2dt^2+\Omega^{-2}dr^2+r^2d\omega_{\mathbb S^2}^2,
+		\qquad
+		\Omega^2=1-\frac{2M}{r}+\frac{e^2}{r^2}
+		=\frac{(r-r_+)(r-r_-)}{r^2},
+	\end{equation}
+	where $M>0$, $0 < |e|<M$, $r_\pm=M\pm\sqrt{M^2-e^2}$, and $r>r_+$.
+	Here $\nabla$ is the Levi--Civita connection of $g$, $\phi$ is complex-valued,
+	and $q_0\in\mathbb R \setminus \{ 0 \}$ is its charge coupling. Both the metric $g$ and
+	the electromagnetic potential $A$ are fixed. 
+	
+	The purpose of this note is to prove mode stability for every
+	sub-extremal Reissner--Nordstr\"om exterior, every angular frequency, and every charge coupling. More precisely, we prove that any solution to \eqref{wave_eqn} of the form
+	\begin{equation} \label{mode_solution}
+		\phi(t, r, \theta, {\varphi}) = e^{-i\omega t} \frac{u(r)}{r}Y_L(\theta, {\varphi}),
+	\end{equation}
+	with $\Im \omega \ge 0$, $\omega \ne 0$,
+	satisfying the standard outgoing regularity conditions at the event horizon and at infinity (see next paragraphs), has to be the trivial solution. Here $Y_L$ denotes {any nonzero spherical harmonic of degree $L$ on the sphere, satisfying}
+	\[
+	-\Delta_{\mathbb S^2}Y_L=L(L+1)Y_L,
+	\qquad L\in\mathbb N_0.
+	\]
+	
+	The proof is an adaptation
+	of Hintz's argument for the scalar wave equation on
+	Kerr--de Sitter~\cite{HintzKdS2026}. In that argument, two currents are constructed, one on each side of a frequency-dependent radius $r_0$ between the event horizon and the cosmological horizon. Each current has monotonicity properties and is associated to the solution conjugated by an oscillatory phase. Evaluated at $r_0$, the two currents give opposite-sign bounds on the same quantity, which forces the solution to vanish. This proves mode stability for real superradiant frequencies, which is the central part of Hintz's work.
+	
+	In the charged scalar field context considered here, the approach needs to be minimally modified to account for the asymptotically flat end. A key aspect, which does not appear in the cosmological setting, is a specific identity satisfied on the Reissner--Nordstr\"om black hole exterior, see already Lemma~\ref{lem:key-factorization}.	For sufficiently small $|q_0e|$, mode stability for a charged scalar field follows by perturbing
+	the non-charged equation; see~\cite[Section~4]{Gajic2026I} and
+	\cite[Section~1.1.7]{Gajic2026II}. Our result removes this smallness
+	assumption throughout the sub-extremal range.
+	
+	To introduce the notation of the main statements, we consider the $(t, r, \theta, {\varphi})$ coordinates of \eqref{RN_metric}. We write $dx/dr=\Omega^{-2}$ and notice that the radial equation for $u$ (coming from \eqref{wave_eqn}) becomes
+	\begin{equation} \label{radial_eqn}
+		\partial_x^2u+
+		\left[\left(\omega-\frac{q_0e}{r}\right)^2
+		-\Omega^2\left(\frac{L(L+1)}{r^2}
+		+\frac{\partial_r\Omega^2}{r}\right)\right]u=0.
+	\end{equation}
+	
+	\begin{definition}[Mode solution] \label{def:mode_solution}
+		We say that a {nonzero solution $\phi$ to \eqref{wave_eqn}} is a mode solution if 
+		\[
+		\phi(t, r, \theta, {\varphi}) = e^{-i\omega t} \frac{u(r)}{r}Y_L(\theta, {\varphi}),
+		\]
+		with $\omega \ne 0$,  where  $u(r)$ is such that
+		\begin{align}
+			u &= B_H e^{-i \br{\omega - \frac{q_0 e}{r_+}} x} \br{1 + o(1)}, \quad \text{ as } x \to -\infty, \label{bc_horizon} \\
+			u &= B_I e^{i \omega x}r^{-i q_0 e}\br{1 + O( r^{-1})}, \quad \text{ as } x \to +\infty, \label{bc_infinity}
+		\end{align}
+		for some non-zero coefficients $B_H$ and $B_I$.
+		We say that $\phi$ is an exponentially growing mode solution if the above is satisfied in the case $\Im(\omega) > 0$. We say that $\phi$ is a real mode solution if the above is satisfied with $\omega \in \mathbb{R} \setminus \{ 0\}$.
+	\end{definition}
+	
+	
+	The case $q_0e=0$ corresponds to the uncharged wave equation. We henceforth assume
+	$q_0e>0$; the result for the opposite sign follows by sending
+	$(\omega,q_0e)$ to $(-\overline\omega,-q_0e)$. Set
+	\[
+	\omega_{\mathrm{res}}:=\frac{q_0e}{r_+},
+	\qquad \lambda:=q_0e,
+	\qquad \sigma:=\frac{\omega}{\omega_{\mathrm{res}}},
+	\qquad \kappa:=\frac{r_+-r_-}{r_+}.
+	\]
+	In the proof below, we divide $r$ and $x$ by $r_+$ and reuse the same
+	notation for the rescaled coordinates. This gives the forthcoming 
+	\eqref{eq:main-radial-equation-hintz}. 
+	
+	\begin{definition} Let  $0< \kappa \le 1$, $\lambda >0$ , $\Im \sigma \ge 0$, {$\sigma\ne0$}, $L \in \mathbb{N}_0$.	Let $u_H$ and $u_I$ be the unique\footnote{The existence and uniqueness statement is an application of results on ODE singularities, see e.g.\ \cite{PSRVdM_asymptotics, RVdM}.} solutions to \eqref{radial_eqn} satisfying, respectively, \eqref{bc_horizon} and \eqref{bc_infinity}{, with the normalizations $B_H=B_I=1$}. Then, we say that \emph{mode stability} holds for \eqref{wave_eqn} if the Wronskian 
+		\[
+		\mathcal W_{\kappa,\lambda}(\sigma,L) := \mathcal W(u_H, u_I) = \br{\partial_x u_H } u_I - u_H \br{ \partial_x u_I}
+		\]
+		satisfies
+		\[
+		\mathcal W_{\kappa,\lambda}(\sigma,L) \ne 0.
+		\]
+	\end{definition}
+	Our theorem~\ref{thm:mode-stability-charged-scalar-field} states that mode stability holds for \eqref{wave_eqn}, i.e.\ that equation \eqref{wave_eqn}  does not admit any mode solution {with $\Im\omega\ge0$} in the sense of {Definition~\ref{def:mode_solution}}.
+	
+	
+	
+	The main obstruction to proving mode stability is \emph{superradiance}. In particular, suppose that $\phi$ is a real mode solution. Then, \eqref{radial_eqn} implies that  $\partial_x \Im \br{u' \overline{u}}=0$ (see already section \ref{section:real_not_superr}). Therefore, the boundary conditions \eqref{bc_horizon} and \eqref{bc_infinity} lead to the relation
+	\begin{equation} \label{superradiant_condition}
+		\omega |B_I|^2+
+		(\omega-\omega_{\mathrm{res}})|B_H|^2=0.
+	\end{equation}
+	We define the superradiant interval
+	\begin{equation} \label{superradiant_int}
+		0<\omega<\omega_{\mathrm{res}}=\frac{q_0e}{r_+},
+		\qquad\text{equivalently}\qquad 0<\sigma<1.
+	\end{equation}
+	Outside the superradiant interval, 
+	\eqref{superradiant_condition} gives a contradiction, showing that no real mode solutions exist for such frequencies.
+	In the superradiant interval \eqref{superradiant_int}, however, the two terms in \eqref{superradiant_condition}
+	have opposite signs and no contradiction arises in such a range.
+	Indeed, the flux of the conserved stationary energy into the horizon
+	has the sign of $\omega(\omega-\omega_{\mathrm{res}})$. 
+	The intuition behind this mechanism is that, although the metric is static,
+	the interaction with the electric field allows the scalar field to
+	extract energy from the black hole~\cite{Bekenstein1973}; see also
+	the numerical study \cite{DiMenzaNicolas2015}. {Charged superradiance is related to the Klein phenomenon for electrostatic potentials, where amplification is compatible with an indefinite conserved energy; see Bachelot~\cite{Bachelot2004} for a rigorous scattering theory and a conjecture on mode stability for charged scalar fields.} In particular, a simple positivity argument does not suffice to prove mode stability for frequencies in the range \eqref{superradiant_int} for charged scalar fields, {unlike in the uncharged case}.
+	
+	Likewise, for
+	$\Im\omega>0$, integrating $\partial_x \Im \br{u' \overline{u}}$ in $\mathbb{R}$ 
+	confines a hypothetical growing mode to
+	$0<\Re\omega<\omega_{\mathrm{res}}$; however it does not exclude it (see already lemma \ref{lem:localization-real-part}).
+	
+	
+	The distinction between fixing and evolving the electromagnetic field
+	is relevant here. In the Maxwell--charged-scalar-field system  the metric is fixed
+	but $A$ evolves together with $\phi$ through the Maxwell equations,
+	\[
+	\nabla^\mu F_{\mu\nu}
+	=\frac{iq_0}{2}
+	\bigl(\phi\overline{D_\nu\phi}-\overline\phi D_\nu\phi\bigr),
+	\qquad F=dA.
+	\]
+	This system is nonlinear, and the sum of the Maxwell and scalar
+	stress-energy tensors is conserved. 
+	In \cite{VdM2022}, boundedness, integrated local
+	energy decay, and inverse-polynomial decay {were} proved for the above nonlinear system
+	in spherical symmetry on fixed sub-extremal Reissner--Nordstr\"om
+	and Schwarzschild exteriors, under smallness assumptions on the
+	Maxwell charge and the initial scalar field energy.
+	
+	In the Einstein--Maxwell--charged-scalar-field system, the metric
+	also evolves. The equation studied here is the scalar equation in the
+	linearization of that system around Reissner--Nordstr\"om with
+	$\phi=0$: the scalar stress-energy tensor and Maxwell current are
+	quadratic in $\phi$, so scalar perturbations decouple at first order.
+	The decay of charged fields in the exterior is also relevant to the
+	interior problem and to Strong Cosmic Censorship. In spherical
+	symmetry, the results of \cite{VdM2018}  {establish stability of the Cauchy horizon and curvature blow-up under quantitative decay assumptions on the event horizon}. The work \cite{KehleVdM2024}
+	showed that, when this decay is slow, its oscillatory character can
+	determine whether the metric and scalar field extend continuously
+	across the Cauchy horizon. {On Reissner--Nordstr\"om--de Sitter, exponential local energy decay holds for massive charged Klein--Gordon fields when the charge product is sufficiently small at fixed positive mass~\cite{Besset2020}; for sufficiently small positive cosmological constant, exponentially growing modes occur in a regime of small charge and mass that includes the massless case~\cite{BessetHafner2021}.} Prescribing such a decay rate in the interior region allows  one to construct $H^1$ metric extensions beyond the Cauchy horizon of solutions to the spherically symmetric Einstein-Maxwell--charged scalar field system, when considering smooth initial data \cite{Rossetti2025}
+	
+	For the linear equation with fixed electromagnetic potential in the asymptotically flat case, Hod and
+	Piran~\cite{HodPiran1998} predicted inverse-power tails, with
+	oscillations along the event horizon. Gajic~\cite{Gajic2026I,Gajic2026II}
+	recently proved energy boundedness, integrated energy decay, and
+	precise late-time asymptotics on extremal and sufficiently
+	near-extremal Reissner--Nordstr\"om black holes, without a smallness assumption
+	on $|q_0e|$. Away from extremality, their extension to arbitrary
+	coupling was conditional on real-frequency mode stability.
+	Related late-time asymptotics for
+	inverse-square potentials were obtained by Gajic~\cite{GajicInverseSquare2023}
+	on Schwarzschild and by Gajic and the second author~\cite{GajicVdM2024}
+	on Minkowski; the latter work also treats a charged wave equation
+	with a fixed Coulomb field.
+	
+	Superradiance is also the principal obstruction to the elementary
+	mode-stability argument for neutral waves on Kerr, where it is caused
+	by rotation. Whiting~\cite{Whiting1989} famously overcame this obstruction
+	for exponentially growing modes by an integral transformation of
+	the radial equation, producing an equation to which a positive
+	energy argument applies. Shlapentokh-Rothman~\cite{ShlapentokhRothman2015}
+	proved real-axis mode stability and quantitative estimates using
+	this transformation. {See also Andersson, Ma, Paganini, and Whiting~\cite{AnderssonMaPaganiniWhiting2017} for real-axis mode stability of the Teukolsky equation on sub-extremal Kerr.} Its adaptation to sub-extremal charged
+	Reissner--Nordstr\"om does not remove superradiance completely:
+	the transformed horizon frequency is a positive multiple of
+	$\omega-q_0e/(r_++r_-)$, leaving
+	$0<\omega<q_0e/(r_++r_-)$ untreated;
+	see~\cite[Appendix~B]{Gajic2026I}.
+	
+	In the extremal case, Gajic~\cite[Theorem~7.14]{Gajic2026I}
+	instead adapts the Whiting-type integral transformation introduced
+	by Teixeira da Costa~\cite{TeixeiraDaCosta2020} for extremal Kerr.
+	The resulting real-frequency Wronskian bounds, away from
+	$\omega=0$ and $\omega=\omega_{\mathrm{res}}$, persist near
+	extremality by an ODE perturbation argument. Separate estimates
+	treat the threshold regimes. The remaining mode-stability problem
+	at arbitrary coupling away from extremality is the one addressed
+	here. On compact parameter and frequency sets away from the
+	thresholds, the required positive lower bound for the Wronskian
+	follows from nonvanishing and continuous dependence of the
+	normalized outgoing solutions.
+	
+	Our proof follows Hintz's conjugation and current
+	argument~\cite{HintzKdS2026}; the key steps are as follows: \begin{itemize}
+		\item {Standard energy and flux identities reduce the analysis of nonzero-frequency modes with $\Im\sigma\ge0$ to $0<\Re\sigma<1$.}
+		\item We compactify the black hole exterior, introducing the coordinate $y=1-\frac{r_+}{r} \in (0,1)$.
+		\item  We remove the outgoing phases by setting $v_-=e^{i\Phi}u$ near
+		the horizon $\{y=0\}$ and $v_+=e^{-i\Phi}u$ near infinity  $\{y=1\}$, with the two
+		conjugations meeting at the transition point $y_0=1-\Re\sigma \in(0,1)$.
+		\item  The conjugated $v_{\pm}$ admit currents which agree at $y=y_0$. For Reissner--Nordstr\"om, the sign
+		needed to compare these currents follows from the explicit
+		factorization in Lemma~\ref{lem:key-factorization}.
+		\item The angular contribution becomes the constant $L(L+1)$; retaining
+		it in the current gives additional nonnegative boundary terms.
+		\item This proves mode stability for every $L$ without a restriction on
+		$\lambda$. The same identity also excludes frequencies in the open
+		upper half-plane.
+		
+		\item  The case $\sigma=0$ is treated (see 
+		Proposition~\ref{prop:sigma-zero-threshold}) by  constructing  solutions with prescribed asymptotics near the regular singular point at infinity of the radial ODE; this is a separate argument, independent from the $\omega\neq 0 $ analysis.
+	\end{itemize}
+	
+	
+	
+	
+	
+	\section{Mode stability for charged scalar fields}
+	
+	While the key argument in this section is strongly inspired by the 
+	%two-sided phase
+	%conjugation and current 
+	construction in Hintz~\cite{HintzKdS2026}, the factorization used below is specific to the
+	Reissner--Nordstr\"om coefficients considered here.
+	
+	\subsection{Reissner--Nordstr\"om coefficients and outgoing solutions}
+	
+	Fix $\lambda>0$ and 
+	$L\in\mathbb N_0$, the latter corresponding to the  eigenvalue $L(L+1)$ for an $L$-th spherical harmonic.  We normalize the event horizon
+	radius $$r_+=1,$$ and define $0<\kappa\leq1$ as twice the surface gravity of the event horizon of a Reissner-Nordstr{\"o}m black hole. Then, we set:
+	\begin{equation}
+		\Omega^2(r)
+		:=\frac{(r-1)(r-1+\kappa)}{r^2},
+		\qquad r\in(1,\infty),
+		\label{eq:Omega2-definition}
+	\end{equation}
+	which coincides with  the function $\Omega^2$ in \eqref{RN_metric}, under our normalization assumptions.
+	The tortoise coordinate $x$ is characterized, up to an additive
+	constant, by
+	\begin{equation}
+		\frac{dr}{dx}=\Omega^2(r).
+		\label{eq:tortoise-Omega}
+	\end{equation}
+	Thus $x\to-\infty$ at the event horizon $\{r=1\}$ and $x\to+\infty$ at infinity $\{r=+\infty\}$.
+	We also set
+	\begin{equation}
+		K(r):=\frac{2-\kappa}{2r^3}-\frac{1-\kappa}{r^4}>0.
+		\label{eq:K-and-g}
+	\end{equation}
+	
+	In the following, we study
+	\begin{equation}
+		\partial_x^2u+
+		\left[\lambda^2\left(\sigma-\frac1r\right)^2-2\Omega^2(r)K(r)
+		-L(L+1)\frac{\Omega^2(r)}{r^2}\right]u=0.
+		\label{eq:main-radial-equation-hintz}
+	\end{equation}
+	We note that \eqref{eq:main-radial-equation-hintz} coincides with \eqref{radial_eqn}, since the black hole mass and charge are related to $\kappa$ by the relations $2M = 2- \kappa$ and $e^2 = 1 - \kappa$.
+	
+	We then define the energy current $Q[u]:=\Im(\overline u\,\partial_xu)$: differentiating $Q[u]$ using \eqref{eq:main-radial-equation-hintz} then gives
+	\begin{equation}
+		Q[u]'(x)
+		=-2\lambda^2\Im\sigma
+		\left(\Re\sigma-\frac1r\right)|u|^2.
+		\label{energy1}
+	\end{equation}
+	
+	
+	For $\Im\sigma\geq0$ we define the outgoing solution at the event horizon as the unique solution $u_H$ to \eqref{eq:main-radial-equation-hintz} satisfying
+	\begin{equation}
+		e^{i\lambda(\sigma-1)x}u_H=1+O(r-1),
+		\qquad
+		\partial_x\!\left(e^{i\lambda(\sigma-1)x}u_H\right)=O(r-1),
+		\quad \text{ as }r\to1.
+		\label{eq:horizon-outgoing-definition}
+	\end{equation}
+	
+	
+	For $\sigma\neq0$, the outgoing solution at infinity is defined using
+	the long-range part of the potential in \eqref{eq:main-radial-equation-hintz}. Let $\Phi$ be defined by 
+	\begin{equation}
+		\partial_r\Phi
+		= \frac{ \lambda(\sigma-r^{-1}) }{\Omega^2(r)}
+		\label{eq:long-range-phase-derivative}
+	\end{equation}
+	Then 
+	\begin{equation}
+		\Phi(r)=\lambda\sigma r
+		+\lambda\bigl((2-\kappa)\sigma-1\bigr)\log r+O(1)
+		\text{ as  } r\to+\infty.
+		\label{eq:long-range-phase-expansion}
+	\end{equation}
+	\begin{equation}
+		\Phi(r)=\lambda(\sigma-1) x(r)\mathbin{{+}}{C_H}
+		+O(e^{\kappa x(r)})
+		\text{ as  } r\to1.
+		\label{eq:short-range-phase-expansion}
+	\end{equation}
+	{Here $C_H\in\mathbb C$ depends on the additive constant in the phase.}
+	The outgoing solution at infinity is defined as the unique solution $u_I$ to \eqref{eq:main-radial-equation-hintz} satisfying
+	\begin{equation}
+		e^{-i\Phi}u_I=1+O(r^{-1}),
+		\qquad
+		\partial_r\!\left(e^{-i\Phi}u_I\right)=O(r^{-2}), \quad \text{as } r \to+\infty.
+		\label{eq:infinity-outgoing-definition}
+	\end{equation}
+	This coincides with \eqref{bc_infinity}, by exploiting the relation between the $r$ and $x$ coordinates in \eqref{eq:tortoise-Omega}.
+	
+	
+	
+	\begin{definition}[Outgoing at both ends]
+		We say that a {nonzero} solution $u$ to \eqref{eq:main-radial-equation-hintz} is outgoing at both ends, {or, equivalently, corresponds to a mode solution}, if both \eqref{eq:horizon-outgoing-definition} and \eqref{eq:infinity-outgoing-definition} {hold with the leading constants $1$ replaced by independent nonzero amplitudes $B_H,B_I$}.
+	\end{definition}
+	
+	Using the Wronskian convention
+	\[
+	W(f,h):=(\partial_x f) h-(\partial_x h)f,
+	\]
+	define
+	\begin{equation}
+		\mathcal W_{\kappa,\lambda}(\sigma,L):=W(u_H,u_I).
+		\label{eq:Wronskian-hintz-section}
+	\end{equation}
+	The Wronskian is independent of $x$ (see \eqref{eq:main-radial-equation-hintz}) and its nonvanishing does not depend
+	on the nonzero normalizations of $u_H$ and $u_I$.
+	
+	\begin{theorem}[Mode stability for the charged scalar field]
+		\label{thm:mode-stability-charged-scalar-field}
+		\label{thm:no-zeroes-upper-half-plane}
+		For every $0<\kappa\leq1$, $\lambda>0$, and $L\in\mathbb N_0$,
+		the radial equation \eqref{eq:main-radial-equation-hintz} has no
+		nonzero solution outgoing at both ends for any $\sigma\neq0$ with
+		$\Im\sigma\geq0$. Equivalently,
+		\begin{equation}
+			\mathcal W_{\kappa,\lambda}(\sigma,L)\neq0
+			\qquad(\sigma\neq0,\ \Im\sigma\geq0).
+			\label{eq:no-zeroes-nonzero-sigma}
+		\end{equation}
+		%At $\sigma=1$, the horizon condition selects the bounded solution.
+		At $\sigma=0$, the same  conclusion holds with a specific convention for the outgoing solution at infinity\footnote{The family of outgoing solutions we construct is not continuous in the limit $\sigma \to 0^+$.} (see already  Proposition~\ref{prop:sigma-zero-threshold}).
+		%This threshold value is defined separately.
+	\end{theorem}
+	
+	\begin{rmk}
+		During the preparation of this paper, we learned that  Z.~Li, S.~Ma, and L.~Zhang independently obtained the same mode stability result \cite{MaAl}. After a private communication between the two groups, we have jointly decided to make both papers public simultaneously.
+	\end{rmk} 
+	
+	In the proof, we also use \eqref{eq:horizon-outgoing-definition} and
+	\eqref{eq:infinity-outgoing-definition} with the leading constants $1$
+	replaced by arbitrary amplitudes $B_H,B_I$, retaining the derivative
+	bounds; at $\sigma=0$, we likewise allow $B_I=0$ in
+	\eqref{eq:threshold-outgoing-definition}. The term outgoing continues
+	to require a nonzero amplitude.
+	
+	
+	\subsection{Localization of a hypothetical mode in the open upper half-plane}
+	
+	\begin{lemma}[Localization of the real part]
+		\label{lem:localization-real-part}
+		Suppose that $\Im\sigma>0$ and that a nonzero solution $u$ of
+		\eqref{eq:main-radial-equation-hintz} is outgoing at both ends.
+		Then $0<\Re\sigma<1$.
+	\end{lemma}
+	
+	\begin{proof}
+		The outgoing asymptotics \eqref{eq:horizon-outgoing-definition} and \eqref{eq:infinity-outgoing-definition} imply
+		\begin{equation}
+			\begin{aligned}
+				|u|+|\partial_xu|&=O\!\left(e^{\lambda\Im\sigma\,x}\right)
+				&& \text{as } x\to-\infty,\\
+				|u|+|\partial_xu|&=O\!\left(e^{-\lambda\Im\sigma\,x}\right)
+				&& \text{as } x\to+\infty,
+			\end{aligned}
+			\label{eq:outgoing-exponential-decay}
+		\end{equation}
+		where we used the fact that \eqref{eq:long-range-phase-derivative}  and \eqref{eq:tortoise-Omega} imply $\partial_x\Im\Phi=\lambda\Im\sigma$. 
+		%Thus the long-range correction does not affect exponential decay in the $x$ coordinate.
+		
+		In particular, $Q[u]:=\Im(\overline u\,\partial_xu)$
+		tends to zero  as $x\rightarrow \pm \infty$. Integrating \eqref{energy1} on $\mathbb{R}$ gives
+		\begin{equation}
+			2\lambda^2\Im\sigma
+			\int_{-\infty}^{+\infty}\left(\Re\sigma-\frac1r\right)|u|^2\,dx=0
+			\label{eq:imaginary-energy-identity}
+		\end{equation}
+		If $\Re\sigma\leq0$ or $\Re\sigma\geq1$, the integrand has a fixed
+		sign, and since
+		$0<r(x)^{-1}<1$, continuity therefore gives $u=0$, a contradiction.
+		
+	\end{proof}
+	
+	\subsection{Compactification of the exterior}
+	
+	Set
+	\begin{equation}
+		y:=1-\frac1r.
+		\label{eq:y-compactification}
+	\end{equation}
+	Then $0<y<1$, with $y=0$ corresponding to the event horizon and $y=1$
+	to infinity. Define
+	\begin{equation}
+		\mu(y):=\frac{dy}{dx}
+		=\frac{\Omega^2(r)}{r^2}
+		=y(1-y)^2\bigl[\kappa+(1-\kappa)y\bigr].
+		\label{eq:mu-explicit}
+	\end{equation}
+	From now on, primes denote derivatives with respect to $y$.
+	In particular,
+	\begin{equation}
+		\partial_x=\mu\partial_y,
+		\qquad \partial_x^2u=\mu(\mu u')'.
+		\label{eq:x-to-y-derivatives}
+	\end{equation}
+	Note that $\mu > 0$ for $0 < y <1$. Dividing \eqref{eq:main-radial-equation-hintz} by ${-}\mu$ gives
+	\begin{equation}
+		-(\mu u')'-\frac{\lambda^2(\sigma-1+y)^2}{\mu}u+[V+L(L+1)]u=0,
+		\label{eq:y-equation}
+	\end{equation}
+	where (see \eqref{eq:K-and-g})
+	\begin{align}
+		V(y)&:=\frac{2\Omega^2(r(y))K(r(y))}{\mu(y)}=2r(y)^2K(r(y))\notag\\
+		&=(2-\kappa)(1-y)-2(1-\kappa)(1-y)^2\notag\\
+		&=(1-y)\bigl[\kappa+2(1-\kappa)y\bigr].
+		\label{eq:V-explicit}
+	\end{align}
+	
+	Thus
+	\begin{equation}
+		\mu(y)>0,\qquad V(y)>0\qquad0<y<1,
+		\label{eq:V-positive}
+	\end{equation}
+	and
+	\begin{equation}
+		\mu(0)=\mu(1)=0,\qquad V(0)=\kappa,\qquad V(1)=0.
+		\label{eq:V-endpoints}
+	\end{equation}
+	
+	\subsection{Two-sided outgoing phase conjugation}\label{section:phase_conj}
+	
+	
+	
+	For the current argument, assume
+	\begin{equation}
+		\Im\sigma\geq0,\qquad 0<\Re\sigma<1,
+		\qquad y_0:=1-\Re\sigma\in(0,1).
+		\label{eq:current-parameter-range}
+	\end{equation}  Note that $y_0$ corresponds to the location of the quadratic transition point in the potential, since when $\sigma \in \mathbb{R}$ \begin{equation}
+		\sigma-\frac{1}{r(y_0)}=0.  
+	\end{equation}
+	Choose the additive constant in the phase in \eqref{eq:long-range-phase-derivative} so that
+	\begin{equation}
+		\Phi(y) =\lambda\int_{y_0}^{y}\frac{z+\sigma-1}{\mu(z)}\,dz.
+		\label{eq:Phi-definition}
+	\end{equation}
+	Then
+	\begin{equation}
+		\Phi(y_0)=0,\qquad
+		\mu(y)\Phi'(y)=\lambda(y-y_0)+i\lambda\Im\sigma, \quad \forall\, 0 < y < 1.
+		\label{eq:phase-derivative}
+	\end{equation}
+	Note that the presence of a second-order transition point in \eqref{eq:y-equation}, due to the quadratic term $-\frac{\lambda^2(\sigma-1+y)^2}{\mu} u$, is the key difficulty. We address this difficulty by conjugating $u$ with its natural phase near the event horizon $\{y=0\}$ and near infinity $\{y=1\}$ respectively, namely we define
+	\begin{equation}
+		v_-(y):=e^{i\Phi(y)}u(y)\quad\text{for } 0<y\leq y_0,
+		\qquad
+		v_+(y):=e^{-i\Phi(y)}u(y)\quad\text{for }y_0\leq y<1.
+		\label{eq:two-sided-conjugation}
+	\end{equation}The corresponding phase defined as $\Phi(y) 1_{\{ 0<y\leq y_0 \}}- \Phi(y) 1_{\{ y_0 \leq y< 1 \}}$ is continuous at $y_0$ but not $C^2$; it is $C^1$ at $y_0$ if and only if $\Im(\sigma)=0$. 
+	We define $y \mapsto \varepsilon(y)$ to be $\varepsilon=-1$ in $(0, y_0]$ and $\varepsilon=+1$ in $(y_0, 1)$,
+	and, with a small abuse of notation, we write $u=e^{i\varepsilon\Phi}v_\varepsilon$ to denote either of the above functions. For a solution $u$ satisfying \eqref{eq:horizon-outgoing-definition} and \eqref{eq:infinity-outgoing-definition}, these conjugations
+	remove the endpoint phases. 
+	
+	\begin{lemma}[Conjugated equation]
+		\label{lem:conjugated-equation}
+		The functions $v_\varepsilon$, $\varepsilon=\pm1$, satisfy
+		\begin{equation}
+			-(\mu v_\varepsilon')'+[V+L(L+1)]v_\varepsilon
+			-i\varepsilon\lambda
+			\bigl[2(y-y_0)v_\varepsilon'+v_\varepsilon\bigr]
+			+2\varepsilon\lambda\Im\sigma\,v_\varepsilon'=0.
+			\label{eq:conjugated-equation}
+		\end{equation}
+	\end{lemma}
+	
+	\begin{proof}
+		Differentiating $u=e^{i\varepsilon\Phi}v_\varepsilon$ gives
+		\begin{equation}
+			\mu u'=e^{i\varepsilon\Phi}
+			\bigl[\mu v_\varepsilon'
+			+i\varepsilon\lambda(y+\sigma-1)v_\varepsilon\bigr].
+			\label{eq:first-conjugated-derivative}
+		\end{equation}
+		\begin{align}
+			(\mu u')'=e^{i\varepsilon\Phi}\biggl[
+			(\mu v_\varepsilon')'
+			+2i\varepsilon\lambda(y+\sigma-1)v_\varepsilon'
+			+i\varepsilon\lambda v_\varepsilon\notag
+			-\frac{\lambda^2(y+\sigma-1)^2}{\mu}v_\varepsilon\biggr].
+			\label{eq:second-conjugated-derivative}
+		\end{align}
+		Substitute this into \eqref{eq:y-equation}. The quadratic 
+		terms $\frac{\lambda^2(\sigma-1+y)^2}{\mu}u$ cancel, and writing
+		$y+\sigma-1=(y-y_0)+i\Im\sigma$ gives
+		\eqref{eq:conjugated-equation}.
+	\end{proof}
+	
+	Combining $\partial_y=r^2\partial_r$ with  \eqref{eq:horizon-outgoing-definition} and \eqref{eq:infinity-outgoing-definition},  we find the following asymptotics: there are constants $B_H,B_I$
+	such that
+	\begin{equation}
+		v_-(y)=B_H+O(y),\qquad v_-'(y)=O(1)
+		\qquad\text{as }y\rightarrow 0,
+		\label{eq:v-minus-endpoint}
+	\end{equation}
+	and
+	\begin{equation}
+		v_+(y)=B_I+O(1-y),\qquad v_+'(y)=O(1)
+		\qquad\text{as }y\rightarrow 1.
+		\label{eq:v-plus-endpoint}
+	\end{equation}
+	
+	
+	\subsection{The Reissner--Nordstr\"om positivity identity}
+	
+	Define
+	\begin{equation}
+		H(y):=2\mu(y)-(y-y_0)\mu'(y).
+		\label{eq:H-definition}
+	\end{equation}
+	We will derive the following useful identity.
+	\begin{lemma}
+		\label{lem:key-factorization}
+		For $0<\kappa\leq1$ and $0\leq y,y_0\leq1$,
+		\begin{equation}
+			H(y)-(y-y_0)^2V(y)
+			=(1-y)(1-y_0)
+			\bigl[\kappa(y+y_0-2yy_0)+2yy_0\bigr].
+			\label{eq:key-factorization}
+		\end{equation}
+		In particular, if $0<y_0<1$, then
+		\begin{equation}
+			H(y)>(y-y_0)^2V(y)\geq0
+			\qquad\text{for }0<y<1.
+			\label{eq:H-strict-positive}
+		\end{equation}
+	\end{lemma}
+	
+	\begin{proof}
+		{Expanding} \eqref{eq:mu-explicit},  \eqref{eq:V-explicit} and using the fact that
+		\[
+		\mu'(y) = (1-y)\br{ -4y^2(1-\kappa) - 3 \kappa y + 2y(1 - \kappa) + \kappa }
+		\]
+		{gives} \eqref{eq:key-factorization}.
+		The right-hand side of \eqref{eq:key-factorization} is nonnegative for $0 < \kappa \le 1$ and $0 \le y, y_0 \le 1$. For
+		$0<y,y_0<1$, the fact that
+		\[
+		y+y_0-2yy_0=y(1-y_0)+y_0(1-y)>0
+		\]
+		proves \eqref{eq:H-strict-positive}.
+	\end{proof}
+	
+	\subsection{The modified Hintz current}
+	
+	Define, on each side of the transition point $y_0$, for $\varepsilon=\pm1$:
+	\begin{align}
+		\mathcal J_\varepsilon:={}&
+		-\mu(y-y_0)|v_\varepsilon'|^2
+		-\mu\Re\bigl(v_\varepsilon'\overline{v_\varepsilon}\bigr)
+		\notag\\
+		&+(y-y_0)[V+L(L+1)]|v_\varepsilon|^2
+		+\varepsilon\lambda\Im\sigma\,|v_\varepsilon|^2.
+		\label{eq:modified-Hintz-current}
+	\end{align}
+	
+	\begin{lemma}[Differential current identity]
+		\label{lem:differential-current-identity}
+		For every $\varepsilon=\pm 1$, {on its corresponding half-interval}, we have:
+		\begin{equation}
+			\mathcal J_\varepsilon'
+			=-\bigl[H+4\lambda\Im\sigma\,|y-y_0|\bigr]
+			|v_\varepsilon'|^2
+			+(y-y_0)V'|v_\varepsilon|^2.
+			\label{eq:current-derivative}
+		\end{equation}
+	\end{lemma}
+	
+	\begin{proof}
+		Multiply \eqref{eq:conjugated-equation} by
+		$2(y-y_0)\overline{v_\varepsilon'}+\overline{v_\varepsilon}$
+		and take real parts. 	The phase term contributes zero, since
+		\[
+		\Re\!\left(-i\varepsilon\lambda
+		\left|2(y-y_0)v_\varepsilon'+v_\varepsilon\right|^2\right)=0.
+		\]
+		The remaining terms, after applying the product rule, give
+		\[
+		0=\mathcal J_\varepsilon'
+		+\bigl[2\mu-(y-y_0)\mu'
+		+4\varepsilon\lambda\Im\sigma\,(y-y_0)\bigr]
+		|v_\varepsilon'|^2
+		-(y-y_0)V'|v_\varepsilon|^2.
+		\]
+		Now use that $\varepsilon(y-y_0)=|y-y_0|$ on the entire interval $(0, 1)$.
+	\end{proof}
+	
+	\begin{proposition}[Positive integrated identity]
+		\label{prop:coercive-integrated-identity}
+		Suppose $0<y_1<y_2<1$ and either $y_1 < y_2 \le y_0$ or $y_0 \le y_1 < y_2$.
+		{Take $\varepsilon=-1$ if $y_2\le y_0$ and $\varepsilon=+1$ if $y_1\ge y_0$. Then:}
+		\begin{align}
+			&\mathcal J_\varepsilon(y_2)-\mathcal J_\varepsilon(y_1)
+			-\left[(y-y_0)V|v_\varepsilon|^2\right]_{y_1}^{y_2}
+			\notag\\
+			&\quad=-\int_{y_1}^{y_2}
+			\bigl[H-(y-y_0)^2V+4\lambda\Im\sigma\,|y-y_0|\bigr]
+			|v_\varepsilon'|^2\,dy\notag\\
+			&\qquad\ -\int_{y_1}^{y_2}
+			V\left|v_\varepsilon+(y-y_0)v_\varepsilon'\right|^2\,dy.
+			\label{eq:coercive-integrated-identity}
+		\end{align}
+		The RHS of \eqref{eq:coercive-integrated-identity} vanishes only if $v_\varepsilon$ vanishes on $[y_1,y_2]$.
+		For outgoing solutions, the identity also holds at $y_1=0$ or
+		$y_2=1$, with endpoint values understood as limits.
+	\end{proposition}
+	
+	\begin{proof}
+		We integrate by parts using $V$, keeping the constant angular
+		term in $\mathcal J_\varepsilon$. This gives
+		\begin{align}
+			\int_{y_1}^{y_2}(y-y_0)V'|v_\varepsilon|^2\,dy
+			={}\left[(y-y_0)V|v_\varepsilon|^2\right]_{y_1}^{y_2}
+			-\int_{y_1}^{y_2}
+			\left[V|v_\varepsilon|^2
+			+2(y-y_0)V\Re\bigl(v_\varepsilon'
+			\overline{v_\varepsilon}\bigr)\right]\,dy.
+			\label{eq:V-integration-by-parts}
+		\end{align}
+		We then complete the square as follows:
+		\begin{align}
+			&\bigl[H+4\lambda\Im\sigma\,|y-y_0|\bigr]|v_\varepsilon'|^2
+			+2(y-y_0)V\Re\bigl(v_\varepsilon'
+			\overline{v_\varepsilon}\bigr)
+			+V|v_\varepsilon|^2\notag\\
+			&\quad=
+			\bigl[H-(y-y_0)^2V+4\lambda\Im\sigma\,|y-y_0|\bigr]
+			|v_\varepsilon'|^2
+			+V\left|v_\varepsilon+(y-y_0)v_\varepsilon'\right|^2.
+			\label{eq:complete-square}
+		\end{align}
+		Combining these two identities with \eqref{eq:current-derivative}
+		proves \eqref{eq:coercive-integrated-identity}.
+		
+		By \eqref{eq:H-strict-positive}, \eqref{eq:V-positive}, 
+		$\Im\sigma\geq0$ and $0< \Re \sigma <1$, if the sum of the
+		integrals vanishes, continuity gives $v_\varepsilon'=0$ and
+		$v_\varepsilon+(y-y_0)v_\varepsilon'=0$ throughout the interval;
+		hence $v_\varepsilon=0$.
+		
+		Finally, the coefficients extend continuously to $y=0,1$, and
+		\eqref{eq:v-minus-endpoint}--\eqref{eq:v-plus-endpoint} give bounded
+		$v_\varepsilon$ and $v_\varepsilon'$ at the relevant endpoint.
+		Thus the integrals converge and the identity extends to the
+		endpoints by taking limits.
+	\end{proof}
+	
+	\subsection{Evaluation of the current at endpoints \texorpdfstring{$y\in\{0,1\}$}{y = 0, 1} and the transition point \texorpdfstring{$y_0$}{y0}}
+	
+	At the transition point, $\Phi(y_0)=0$ by definition, so
+	\begin{equation}
+		v_\varepsilon(y_0)=u(y_0),\qquad
+		v_\varepsilon'(y_0)
+		=u'(y_0)+\varepsilon\frac{\lambda\Im\sigma}{\mu(y_0)}u(y_0).
+		\label{eq:v-derivative-seam}
+	\end{equation}
+	Substitution into \eqref{eq:modified-Hintz-current} gives
+	\begin{equation}
+		\mathcal J_-(y_0)=\mathcal J_+(y_0)
+		=-\mu(y_0)\Re\bigl(u'(y_0)\overline{u(y_0)}\bigr).
+		\label{eq:seam-current-equality}
+	\end{equation}
+	Using \eqref{eq:v-minus-endpoint}--\eqref{eq:v-plus-endpoint} and
+	\eqref{eq:V-endpoints}, we obtain
+	\begin{equation}
+		\begin{aligned}
+			\mathcal J_-(0)
+			&=-\bigl[y_0\bigl(\kappa+L(L+1)\bigr)
+			+\lambda\Im\sigma\bigr]|B_H|^2,\\
+			\mathcal J_+(1)
+			&=\bigl[(1-y_0)L(L+1)+\lambda\Im\sigma\bigr]|B_I|^2.
+		\end{aligned}
+		\label{eq:endpoint-currents}
+	\end{equation}
+	
+	We now apply \eqref{eq:coercive-integrated-identity} over the intervals $[0, y_0]$ (with $\varepsilon=-1$) and $[y_0, 1]$ (with $\varepsilon=1$). Let $\mathcal E_-$ and $\mathcal E_+$ denote the sums of the two
+	nonnegative integrals in \eqref{eq:coercive-integrated-identity} over
+	$[0,y_0]$ and $[y_0,1]$, respectively.
+	In the case of the interval $[0, y_0]$, the boundary term is
+	\[
+	\left[(y-y_0)V|v_-|^2\right]_{0}^{y_0}
+	=\kappa y_0|B_H|^2.
+	\]
+	It cancels the corresponding term in $\mathcal J_-(0)$, and hence
+	\begin{equation}
+		\mathcal J_-(y_0)
+		=-\bigl[y_0L(L+1)+\lambda\Im\sigma\bigr]|B_H|^2-\mathcal E_-.
+		\label{eq:left-seam-sign}
+	\end{equation}
+	When considering the interval $[y_0, 1]$ in \eqref{eq:coercive-integrated-identity}, the boundary term vanishes at both ends, so
+	\begin{equation}
+		\mathcal J_+(y_0)
+		=\bigl[(1-y_0)L(L+1)+\lambda\Im\sigma\bigr]|B_I|^2+\mathcal E_+.
+		\label{eq:right-seam-sign}
+	\end{equation}
+	Since the two currents coincide at $y_0$ (equation \eqref{eq:seam-current-equality}), we have:
+	\begin{equation}
+		\begin{aligned}
+			0={}&\lambda\Im\sigma\bigl(|B_H|^2+|B_I|^2\bigr)\\
+			&+L(L+1)\bigl[y_0|B_H|^2+(1-y_0)|B_I|^2\bigr]
+			+\mathcal E_-+\mathcal E_+.
+		\end{aligned}
+		\label{eq:master-mode-identity}
+	\end{equation}
+	
+	\subsection{Exclusion of exponentially growing modes and real superradiant modes}
+	
+	\begin{proposition}[No exponentially growing modes]
+		\label{prop:no-upper-half-plane-modes}
+		There is no nonzero solution of
+		\eqref{eq:main-radial-equation-hintz} outgoing at both ends when
+		$\Im\sigma>0$.
+	\end{proposition}
+	
+	\begin{proof}
+		If such a solution existed, Lemma~\ref{lem:localization-real-part}
+		would give $0<\Re\sigma<1$, so $y_0 \in (0, 1)$ (see \eqref{eq:current-parameter-range}) and the results from section \ref{section:phase_conj} onwards apply.
+		
+		All terms in \eqref{eq:master-mode-identity} are nonnegative, so
+		$\mathcal E_-=\mathcal E_+=0$. Proposition~\ref{prop:coercive-integrated-identity}
+		then gives $v_-=v_+=0$, hence $u=0$, a contradiction.
+		
+		
+	\end{proof}
+	
+	\begin{proposition}[No real modes in the superradiant interval]
+		\label{prop:no-real-superradiant-modes}
+		There is no nonzero solution of
+		\eqref{eq:main-radial-equation-hintz} outgoing at both ends when
+		$\sigma\in(0,1)$.
+	\end{proposition}
+	
+	\begin{proof}
+		Now $\Im\sigma=0$ and $0<y_0<1$. Equation
+		\eqref{eq:master-mode-identity} gives
+		\[
+		L(L+1)\bigl[y_0|B_H|^2+(1-y_0)|B_I|^2\bigr]
+		+\mathcal E_-+\mathcal E_+=0.
+		\]
+		All terms are nonnegative, so $\mathcal E_-=\mathcal E_+=0$. By the strict
+		positivity in Proposition~\ref{prop:coercive-integrated-identity},
+		$v_-=0$ on $(0,y_0)$ and $v_+=0$ on $(y_0,1)$. Thus $u=0$,
+		a contradiction.
+	\end{proof}
+	
+	\subsection{Real frequencies outside the superradiant interval}\label{section:real_not_superr}
+	
+	{For real $\sigma$, the coefficients in \eqref{eq:main-radial-equation-hintz} are real-valued.} Hence the energy current
+	\begin{equation}
+		Q[u]:=\Im\bigl(\overline u\,\partial_xu\bigr)
+		\label{eq:usual-flux}
+	\end{equation}
+	is independent of $x$. If $\sigma\neq0$ and a solution
+	satisfies both endpoint asymptotic conditions \eqref{eq:horizon-outgoing-definition} and \eqref{eq:infinity-outgoing-definition}, with amplitudes $B_H,B_I$
+	possibly zero, then
+	\begin{equation}
+		Q[u](x)\to\lambda(1-\sigma)|B_H|^2
+		\text{ as } x\to -\infty,
+		\qquad
+		Q[u](x)\mathrel{{\to}}\lambda\sigma|B_I|^2
+		\text{ as } x\to +\infty.
+		\label{eq:real-frequency-fluxes}
+	\end{equation}
+	
+	
+	For $\sigma<0$ or $\sigma>1$, this
+	forces $B_H=B_I=0$. At $\sigma=1$, $u_H$ is
+	bounded and satisfies
+	\[
+	\partial_xu_H\longrightarrow0\qquad x\to-\infty.
+	\]
+	Thus, $Q[u_H](x)\to 0$ as $x\to -\infty$, so equality with the
+	$\lambda|B_I|^2$ term forces $B_I=0$. This also excludes
+	a common outgoing solution. Together with
+	Proposition~\ref{prop:no-real-superradiant-modes}, we conclude that
+	\begin{equation}
+		\mathcal W_{\kappa,\lambda}(\sigma,L)\neq0
+		\qquad\text{for every real }\sigma\neq0.
+		\label{eq:no-real-zeroes-except-threshold}
+	\end{equation}
+	
+	\subsection{The case \texorpdfstring{$\sigma=0$}{sigma = 0}}
+	
+	At $\sigma=0$, the ODE \eqref{eq:main-radial-equation-hintz} becomes
+	\begin{equation}
+		\partial_x^2u+
+		\left[\frac{\lambda^2-L(L+1)}{r^2}+O(r^{-3})\right]u=0 \text{ as }
+		\qquad r\to+\infty.
+		\label{eq:sigma-zero-asymptotic-equation}
+	\end{equation}
+	Equivalently, in the $r$ coordinate,
+	\begin{equation}
+		\partial_r^2u+O(r^{-2})\partial_ru
+		+\left[\frac{\lambda^2-L(L+1)}{r^2}+O(r^{-3})\right]u=0.
+		\label{eq:sigma-zero-r-equation}
+	\end{equation}
+	{The coefficients of the exact equation \eqref{eq:main-radial-equation-hintz} at $\sigma=0$, expressed in $r$, are analytic in $1/r$ near zero after the displayed powers are factored out.} 
+	This ODE has a regular singular point at $r=+\infty$ (see e.g.\ \cite{Olver}), so there exists a sequence $(a_n)_{n \in \mathbb{N}} \subset {\mathbb{C}}$ so that
+	\[
+	u(r) = r^s \sum_{n=0}^{+\infty}a_n r^{-n}
+	\]
+	is a solution to {\eqref{eq:main-radial-equation-hintz} at $\sigma=0$} in $r > r_+$, where $s$ is one of the solutions to 
+	\begin{equation}
+		s(s-1)+\lambda^2-L(L+1)=0.
+		\label{eq:threshold-indicial-equation}
+	\end{equation}
+	In the following, we make a choice for such an $s$, see already {Remark~\ref{rmk.choice}}.
+	
+	
+	\begin{proposition}[Non-zero Wronskian when $\sigma=0$]
+		\label{prop:sigma-zero-threshold}
+		At $\sigma=0$, assume $B_I \ne 0$ and define the solution $u_I$ to {\eqref{eq:main-radial-equation-hintz}} as
+		\begin{equation}
+			u_I(r;\lambda,0)=
+			\begin{cases}
+				B_I r^{\frac12-\sqrt{(L+\frac12)^2-\lambda^2}}
+				\bigl(1+O(r^{-1})\bigr),&0<\lambda<L+\frac12,\\[1mm]
+				B_I r^{1/2}\bigl(1+O(r^{-1})\bigr),&\lambda=L+\frac12,\\[1mm]
+				B_I r^{\frac12-i\sqrt{\lambda^2-(L+\frac12)^2}}
+				\bigl(1+O(r^{-1})\bigr),&\lambda>L+\frac12.
+			\end{cases}
+			\label{eq:threshold-outgoing-definition}
+		\end{equation}
+		Here, the $O(r^{-1})$ term can be differentiated in $r$, and its $\partial_r$-derivative is  $O(r^{-2})$. With this definition, we have
+		\begin{equation}
+			\mathcal W_{\kappa,\lambda}(0,L)\neq0\qquad(\lambda>0).
+			\label{eq:no-zero-at-sigma-zero}
+		\end{equation}
+	\end{proposition}
+	
+	\begin{proof}
+		At $\sigma=0$, a nonzero solution  $u(x)$ satisfying the outgoing condition \eqref{eq:horizon-outgoing-definition} at the event horizon obeys the following asymptotics
+		\begin{equation}
+			u(x)=B_H e^{i\lambda x}\bigl(1+O(r(x)-1)\bigr), \text{ as }
+			\ x\to-\infty,
+			\label{eq:sigma-zero-horizon-asymptotic}
+		\end{equation}
+		with the corresponding differentiated asymptotics. Its energy current is
+		therefore
+		\begin{equation}
+			Q[u]=\lambda|B_H|^2>0.
+			\label{eq:sigma-zero-horizon-current}
+		\end{equation}
+		
+		
+		For $0<\lambda\leq L+\frac12$, write
+		$u_I=B_Ir^s(1+\rho)$, where
+		$s=\frac12-\sqrt{(L+\frac12)^2-\lambda^2}\leq\frac12$,
+		$\rho=O(r^{-1})$ and $\partial_r\rho=O(r^{-2})$.
+		Since $s$ is real,
+		\[
+		Q[u_I]
+		=\Omega^2|B_I|^2r^{2s}
+		\Im\bigl((1+\overline\rho)\partial_r\rho\bigr)
+		=O(r^{2s-2})\longrightarrow0.
+		\]
+		By energy conservation, $Q[u_I]=0$, including when $B_I=0$.
+		For $\lambda>L+\frac12$, the differentiable
+		asymptotics in \eqref{eq:threshold-outgoing-definition}, together
+		with $\partial_x=\Omega^2\partial_r$ and
+		$\Omega^2\to1$, give
+		\begin{equation}
+			Q[u_I]
+			=-\sqrt{\lambda^2-(L+\frac12)^2}\,|B_I|^2\leq0.
+			\label{eq:sigma-zero-infinity-current}
+		\end{equation}
+		Thus a nonzero common outgoing solution would have positive flux
+		at the horizon and nonpositive flux at infinity, contradicting
+		conservation of $Q$. This proves
+		\eqref{eq:no-zero-at-sigma-zero}.
+	\end{proof}
+	
+	\begin{rmk}[Meaning of the threshold convention.]\label{rmk.choice}
+		For $\lambda>L+\frac12$, {the powers}
+		$r^{1/2\pm i\sqrt{\lambda^2-(L+1/2)^2}}$ have the same modulus. The sign in
+		\eqref{eq:threshold-outgoing-definition} is therefore part of the
+		definition, not a consequence of selecting the slower-growing
+		solution. It selects the branch with negative flux; the selected
+		branches for $0<\lambda\leq L+\frac12$ have zero flux.
+		
+		The value $\mathcal W_{\kappa,\lambda}(0,L)$ is defined separately by
+		this convention.
+	\end{rmk}
+	
+	
+	\begin{proof}[Proof of Theorem~\ref{thm:mode-stability-charged-scalar-field}]
+		Proposition~\ref{prop:no-upper-half-plane-modes} excludes all
+		frequencies with $\Im\sigma>0$. The real superradiant interval
+		is covered by Proposition~\ref{prop:no-real-superradiant-modes},
+		and the flux argument excludes all other nonzero real frequencies.
+		Proposition~\ref{prop:sigma-zero-threshold} treats $\sigma=0$
+		under the stated threshold convention.
+		
+		
+		More precisely, the preceding arguments give $B_I=0$ for $\sigma\neq0$
+		and $B_H=0$ for $\sigma=0$ whenever a solution satisfies both
+		asymptotic conditions \eqref{eq:horizon-outgoing-definition} and \eqref{eq:infinity-outgoing-definition}{, with \eqref{eq:threshold-outgoing-definition} replacing the latter when $\sigma=0$}.
+		To deduce the Wronskian conclusion directly, suppose
+		$W(u_H,u_I)=0$. Since $W(u_H,u_I)$ does not depend on $x$, it vanishes for every $x$.
+		If $\sigma\neq0$, the  horizon outgoing condition \eqref{eq:horizon-outgoing-definition} makes $u_H$ nonvanishing
+		sufficiently near the horizon, and
+		\[
+		\partial_x\!\left(\frac{u_I}{u_H}\right)
+		=\frac{W(u_I,u_H)}{u_H^2}=0.
+		\]
+		Thus $u_I=cu_H$ there for some $c\in\mathbb C$. The solution $u_I$
+		therefore satisfies the horizon outgoing condition \eqref{eq:horizon-outgoing-definition} with amplitude $cB_H$,
+		while its  amplitude $B_I$ at $r=+\infty$ is nonzero, contradicting $B_I=0$.
+		If $\sigma=0$, use instead that $u_I$ is nonvanishing sufficiently
+		near infinity. The same quotient argument gives $u_H=cu_I$ there,
+		so $u_H$ satisfies the threshold condition with amplitude $cB_I$.
+		This contradicts $B_H=0$, since its horizon amplitude is nonzero.
+		
+		
+	\end{proof}
+	
+	\begin{thebibliography}{99}
+		
+		\bibitem{HintzKdS2026}
+		P.~Hintz,
+		\emph{Mode stability for the scalar wave equation on subextremal
+			Kerr--de Sitter spacetimes},
+		arXiv:2608.25868v1 (2026).
+		\url{https://arxiv.org/abs/2608.25868v1}.
+		
+		\bibitem{RVdM}
+		F.~Rossetti and M.~Van de Moortel,
+		\emph{Late-time asymptotics of charged scalar fields on sub-extremal Reissner--Nordstr{\"o}m black holes},
+		in preparation.
+		
+		\bibitem{PSRVdM_asymptotics}
+		F.~Pasqualotto, Y.~Shlapentokh-Rothman, and M.~Van de Moortel,
+		\emph{The asymptotics of massive fields on stationary spherically symmetric black holes for all angular momenta},
+		preprint (2023), \href{https://arxiv.org/abs/2303.17767}{arXiv:2303.17767} [gr-qc].
+		
+		\bibitem{Bekenstein1973}
+		J.~D.~Bekenstein,
+		\emph{Extraction of energy and charge from a black hole},
+		Phys. Rev. D \textbf{7} (1973), 949--953.
+		\url{https://doi.org/10.1103/PhysRevD.7.949}.
+		
+		\bibitem{Bachelot2004}
+		{
+			A.~Bachelot,
+			\emph{Superradiance and scattering of the charged Klein--Gordon field by a step-like electrostatic potential},
+			J. Math. Pures Appl. (9) \textbf{83} (2004), no.~10, 1179--1239.
+			\url{https://doi.org/10.1016/j.matpur.2004.03.007}.}
+		
+		\bibitem{HodPiran1998}
+		S.~Hod and T.~Piran,
+		\emph{Late-time evolution of charged gravitational collapse and
+			decay of charged scalar hair. II},
+		Phys. Rev. D \textbf{58} (1998), 024018.
+		
+		\bibitem{DiMenzaNicolas2015}
+		L.~Di Menza and J.-P.~Nicolas,
+		\emph{Superradiance on the Reissner--Nordstr\"om metric},
+		Class. Quantum Grav. \textbf{32} (2015), 145013.
+		
+		\bibitem{Besset2020}
+		N.~Besset,
+		\emph{Decay of the local energy for the charged Klein--Gordon equation in the exterior De Sitter--Reissner--Nordstr\"om spacetime},
+		Ann. Henri Poincar\'e \textbf{21} (2020), no.~8, 2433--2484.
+		\href{https://doi.org/10.1007/s00023-020-00919-z}{doi:10.1007/s00023-020-00919-z}.
+		
+		\bibitem{BessetHafner2021}
+		{
+			N.~Besset and D.~H\"afner,
+			\emph{Existence of exponentially growing finite energy solutions for the charged Klein--Gordon equation on the de Sitter--Kerr--Newman metric},
+			J. Hyperbolic Differ. Equ. \textbf{18} (2021), 293--310.
+			\url{https://doi.org/10.1142/S0219891621500090}.}
+		
+		\bibitem{Rossetti2025}
+		F.~Rossetti,
+		\emph{Strong cosmic censorship for the spherically symmetric Einstein--Maxwell-charged-Klein--Gordon system with positive $\Lambda$: stability of the Cauchy horizon and $H^1$ extensions},
+		Ann. Henri Poincar\'e \textbf{26} (2025), 675--753.
+		\href{https://doi.org/10.1007/s00023-024-01454-x}{doi:10.1007/s00023-024-01454-x}.
+		
+		\bibitem{VdM2022}
+		M.~Van de Moortel,
+		\emph{Decay of weakly charged solutions for the spherically symmetric
+			Maxwell-Charged-Scalar-Field equations on a Reissner--Nordstr\"om
+			exterior space-time},
+		Ann. Sci. \'Ec. Norm. Sup\'er. (4) \textbf{55} (2022), no.~2, 283--404.
+		
+		\bibitem{Gajic2026I}
+		D.~Gajic,
+		\emph{Charged scalar fields on Reissner--Nordstr\"om spacetimes I:
+			integrated energy estimates},
+		arXiv:2603.28874 (2026).
+		\url{https://arxiv.org/abs/2603.28874}.
+		
+		\bibitem{Gajic2026II}
+		D.~Gajic,
+		\emph{Charged scalar fields on Reissner--Nordstr\"om spacetimes II:
+			late-time tails and instabilities},
+		arXiv:2603.28861 (2026).
+		\url{https://arxiv.org/abs/2603.28861}.
+		
+		\bibitem{Olver}
+		F.~W.~J. Olver,
+		\emph{Asymptotics and Special Functions},
+		AKP Classics,
+		A K Peters, Wellesley, MA, 1997.
+		Reprint of the 1974 original (Academic Press, New York).
+		
+		\bibitem{Whiting1989}
+		B.~F.~Whiting,
+		\emph{Mode stability of the Kerr black hole},
+		J. Math. Phys. \textbf{30} (1989), 1301--1305.
+		\url{https://doi.org/10.1063/1.528308}.
+		
+		\bibitem{ShlapentokhRothman2015}
+		Y.~Shlapentokh-Rothman,
+		\emph{Quantitative mode stability for the wave equation on the Kerr
+			spacetime},
+		Ann. Henri Poincar\'e \textbf{16} (2015), no.~1, 289--345.
+		
+		\bibitem{AnderssonMaPaganiniWhiting2017}
+		{
+			L.~Andersson, S.~Ma, C.~Paganini, and B.~F.~Whiting,
+			\emph{Mode stability on the real axis},
+			J. Math. Phys. \textbf{58} (2017), no.~7, 072501.
+			\url{https://doi.org/10.1063/1.4991656}.}
+		
+		
+		\bibitem{VdM2018}
+		M.~Van de Moortel,
+		\emph{Stability and instability of the sub-extremal
+			Reissner--Nordstr\"om black hole interior for the
+			Einstein--Maxwell--Klein--Gordon equations in spherical symmetry},
+		Comm. Math. Phys. \textbf{360} (2018), 103--168.
+		
+		\bibitem{KehleVdM2024}
+		C.~Kehle and M.~Van de Moortel,
+		\emph{Strong Cosmic Censorship in the presence of matter:
+			the decisive effect of horizon oscillations on the black hole
+			interior geometry},
+		Anal. PDE \textbf{17} (2024), no.~5, 1501--1592.
+		
+		\bibitem{GajicInverseSquare2023}
+		D.~Gajic,
+		\emph{Late-time asymptotics for geometric wave equations with
+			inverse-square potentials},
+		J. Funct. Anal. \textbf{285} (2023), no.~7, 110058.
+		
+		\bibitem{GajicVdM2024}
+		D.~Gajic and M.~Van de Moortel,
+		\emph{Late-time tails for scale-invariant wave equations with a
+			potential and the near-horizon geometry of null infinity},
+		arXiv:2401.13047 (2024).
+		\url{https://arxiv.org/abs/2401.13047}.
+		
+		\bibitem{TeixeiraDaCosta2020}
+		R.~Teixeira da Costa,
+		\emph{Mode stability for the Teukolsky equation on extremal and
+			subextremal Kerr spacetimes},
+		Comm. Math. Phys. \textbf{378} (2020), no.~1, 705--781.
+		
+		\bibitem{MaAl}
+		Z.~Li, S.~Ma, and L.~Zhang,
+		\emph{Mode stability for the charged scalar field in
+			Reissner--Nordstr\"om spacetime},
+		in preparation
+	\end{thebibliography}
+\end{document}
+
+
+
+
+
